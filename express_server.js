@@ -1,4 +1,6 @@
 const express = require("express");
+// Line2; creates an object representing the application
+// Line2; the object should be the same object for each request, response
 const app = express();
 const PORT = 8080; // default port 8080
 
@@ -17,6 +19,7 @@ app.get("/urls", (req, res) => {
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
+
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
