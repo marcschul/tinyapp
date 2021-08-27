@@ -1,35 +1,41 @@
+// Import packages
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 
+// Server Set-up
 const app = express();
 const PORT = 8080;
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+app.set("view engine", "ejs");
 
+// Functions
 function generateRandomString() {
   let result = '';
   let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for ( let i = 0; i < 6; i++ ) {
+  for (let i = 0; i < 6; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return result;
 }
 
-app.set("view engine", "ejs");
-
+// Database
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
+// Requests
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  templateVars = {
+    username: req.cookies["username"]
+  };
+  res.render("urls_new", templateVars);
 });
 
 app.get("/urls", (req, res) => {
@@ -42,6 +48,7 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
+    username: req.cookies["username"],
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL]
   };
@@ -73,14 +80,19 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  const newLongURL = req.body.longURL
-  const shortURL = req.params.shortURL
+  const newLongURL = req.body.longURL;
+  const shortURL = req.params.shortURL;
   urlDatabase[shortURL] = newLongURL;
   res.redirect(`/urls`);
 });
 
 app.post("/login", (req, res) => {
   res.cookie('username', req.body.username);
+  res.redirect('/urls');
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie('username');
   res.redirect('/urls');
 });
 
