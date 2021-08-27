@@ -10,7 +10,7 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
-    <% if (username === undefined) { %>
+    <% if (user === undefined) { %>
     <form method="POST" action="/login"> 
       <div class="d-flex justifty-content-end">
 
@@ -29,7 +29,7 @@
       <div class="d-flex justifty-content-end">
 
         <div>
-          <p class="my-2">Logged in As: <%= username %>!</p>
+          <p class="my-2">Logged in As: <%= user %>!</p>
         </div>
 
         <div class="mx-3">
