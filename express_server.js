@@ -1,4 +1,4 @@
-// Import packages
+// Import packages / functions
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
@@ -19,6 +19,8 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+const users = {};
 
 // GET Requests
 app.get("/", (req, res) => {
@@ -88,4 +90,21 @@ app.post("/login", (req, res) => {
 app.post("/logout", (req, res) => {
   res.clearCookie('username');
   res.redirect('/urls');
+});
+
+app.post("/register", (req, res) => {
+  const randomID = generateRandomString();
+  const userID = 'user' + Object.keys(users).length + randomID;
+  if (users[userID] === undefined) {
+    users[userID] = {
+      id: randomID,
+      email: req.body.email,
+      password: req.body.password
+    }
+  } else {
+    console.log('error: userID already taken');
+    res.redirect("/urls");
+  }
+
+  console.log(users);
 });
