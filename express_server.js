@@ -105,6 +105,7 @@ app.post("/register", (req, res) => {
     console.log('error: userID already taken');
     res.redirect("/urls");
   }
-
+  res.cookie('user_id', userID);
   console.log(users);
+  res.redirect("/urls");
 });
