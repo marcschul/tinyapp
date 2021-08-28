@@ -116,6 +116,16 @@ app.post("/logout", (req, res) => {
 app.post("/register", (req, res) => {
   const randomID = generateRandomString();
   const userID = 'user' + Object.keys(users).length + randomID;
+
+  if (req.body.email === '' || req.body.password === '') {
+    res.status(400)
+    res.send(`
+    <div style="text-align: center; padding: 3em">
+    <h1>Error: 400</h1>
+    <h3>Bad Request</h3>
+    `)
+  }
+
   if (users[userID] === undefined) {
     users[userID] = {
       id: randomID,
@@ -126,7 +136,9 @@ app.post("/register", (req, res) => {
     console.log('error: userID already taken');
     res.redirect("/urls");
   }
+
   res.cookie('user_id', userID);
-  console.log(users);
+  console.log('users = ', users);
+  console.log('name="email" === ', req.body.email)
   res.redirect("/urls");
 });
