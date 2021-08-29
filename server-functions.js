@@ -39,9 +39,17 @@ const userCheckUserID = function (users, userID, randomID, req, res) {
   }
 };
 
+const registerCheckBlank = function(req, res) {
+  if (req.body.email === '' || req.body.password === '') {
+    res.status(400)
+    res.redirect("/error");
+  }
+}
+
 module.exports = {
   generateRandomString,
   userCheckEmail,
   userCheckLogin,
-  userCheckUserID
+  userCheckUserID,
+  registerCheckBlank
 };

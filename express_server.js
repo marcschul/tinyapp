@@ -5,7 +5,8 @@ const cookieParser = require('cookie-parser');
 const { generateRandomString, 
   userCheckEmail,
   userCheckLogin,
-  userCheckUserID
+  userCheckUserID,
+  registerCheckBlank
 } = require('./server-functions');
 
 // Server Set-up
@@ -122,13 +123,10 @@ app.post("/register", (req, res) => {
   const userID = 'user' + Object.keys(users).length + randomID;
 
   userCheckEmail(users, req, res);
-
-  if (req.body.email === '' || req.body.password === '') {
-    res.status(400)
-    res.redirect("/error");
-  }
-
   userCheckUserID(users, userID, randomID, req, res);
+  registerCheckBlank(req, res);
+
   res.cookie('user_id', userID);
+  console.log(users);
   res.redirect("/urls");
 });
