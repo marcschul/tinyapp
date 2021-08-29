@@ -108,12 +108,23 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect('/urls');
+  console.log('users = ', users);
+  if (userCheckEmail(users, false, req, res)) {
+    for (const user in users){
+      let bodyEmail = req.body.email;
+      let bodyPassword = req.body.password;
+      let userEmail = users[user].email;
+      let userPassword = users[user].password;
+      if (bodyEmail === userEmail && bodyPassword === userPassword) {
+      res.cookie('user_id', req.body.email);
+      res.redirect('/urls');
+      };
+    };
+  };
+  res.sendStatus(403);
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
   res.clearCookie('user_id');
   res.redirect('/urls');
 });
@@ -122,7 +133,10 @@ app.post("/register", (req, res) => {
   const randomID = generateRandomString();
   const userID = 'user' + Object.keys(users).length + randomID;
 
-  userCheckEmail(users, req, res);
+  if (userCheckEmail(users, false, req, res)) {
+    res.sendStatus(400);
+  }
+
   userCheckUserID(users, userID, randomID, req, res);
   registerCheckBlank(req, res);
 
