@@ -39,6 +39,7 @@ const userCheckUserID = function (users, userID, randomID, req, res) {
   }
 };
 
+// Checks if either email or password fields are blank
 const registerCheckBlank = function(req, res) {
   if (req.body.email === '' || req.body.password === '') {
     res.status(400)
