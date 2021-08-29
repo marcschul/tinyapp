@@ -35,6 +35,13 @@ app.get("/error", (req, res) => {
   res.render("urls_error");
 });
 
+app.get("/login", (req, res) => {
+  const templateVars = {
+    user: req.cookies["user_id"]
+  }
+  res.render("urls_login", templateVars);
+});
+
 app.get("/urls/new", (req, res) => {
   const templateVars = {
     user: req.cookies["user_id"]
