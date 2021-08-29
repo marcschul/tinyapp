@@ -120,6 +120,7 @@ app.post("/register", (req, res) => {
     res.redirect("/error");
   }
 
+  // Checks if userID is taken
   if (users[userID] === undefined) {
     users[userID] = {
       id: randomID,
@@ -128,11 +129,9 @@ app.post("/register", (req, res) => {
     }
   } else {
     console.log('error: userID already taken');
-    res.redirect("/urls");
+    res.redirect("/error");
   }
 
   res.cookie('user_id', userID);
-  console.log('users = ', users);
-  console.log('name="email" === ', req.body.email)
   res.redirect("/urls");
 });
