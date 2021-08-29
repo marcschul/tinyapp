@@ -2,7 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
-const generateRandomString = require('./server-functions');
+const { generateRandomString, userCheck } = require('./server-functions');
 
 // Server Set-up
 const app = express();
@@ -25,6 +25,10 @@ const users = {};
 // GET Requests
 app.get("/", (req, res) => {
   res.redirect("/urls");
+});
+
+app.get("/error", (req, res) => {
+  res.render("urls_error");
 });
 
 app.get("/urls/new", (req, res) => {
@@ -117,13 +121,11 @@ app.post("/register", (req, res) => {
   const randomID = generateRandomString();
   const userID = 'user' + Object.keys(users).length + randomID;
 
+  userCheck(users, req, res);
+
   if (req.body.email === '' || req.body.password === '') {
     res.status(400)
-    res.send(`
-    <div style="text-align: center; padding: 3em">
-    <h1>Error: 400</h1>
-    <h3>Bad Request</h3>
-    `)
+    res.redirect("/error");
   }
 
   if (users[userID] === undefined) {
