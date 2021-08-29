@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const { generateRandomString, 
   userCheckEmail,
-  userCheckLogin 
+  userCheckLogin,
+  userCheckUserID
 } = require('./server-functions');
 
 // Server Set-up
@@ -17,7 +18,7 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-// Database
+// Databases
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -120,18 +121,7 @@ app.post("/register", (req, res) => {
     res.redirect("/error");
   }
 
-  // Checks if userID is taken
-  if (users[userID] === undefined) {
-    users[userID] = {
-      id: randomID,
-      email: req.body.email,
-      password: req.body.password
-    }
-  } else {
-    console.log('error: userID already taken');
-    res.redirect("/error");
-  }
-
+  userCheckUserID(users, userID, randomID, req, res);
   res.cookie('user_id', userID);
   res.redirect("/urls");
 });

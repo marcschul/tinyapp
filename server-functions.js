@@ -25,8 +25,23 @@ const userCheckLogin = function (templateVars, users, req, res) {
   }
 };
 
+// Checks if user's ID is already in database when registering a user
+const userCheckUserID = function (users, userID, randomID, req, res) {
+  if (users[userID] === undefined) {
+    users[userID] = {
+      id: randomID,
+      email: req.body.email,
+      password: req.body.password
+    }
+  } else {
+    console.log('error: userID already taken');
+    res.redirect("/error");
+  }
+};
+
 module.exports = {
   generateRandomString,
   userCheckEmail,
-  userCheckLogin
+  userCheckLogin,
+  userCheckUserID
 };
