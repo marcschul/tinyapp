@@ -9,7 +9,7 @@ const generateRandomString = function () {
 }
 
 // Checks if user's email is already in database
-const userCheck = function (users, req, res) {
+const userCheckEmail = function (users, req, res) {
   for (const user in users) {
     if (req.body.email === users[user].email) {
       res.status(400);
@@ -18,7 +18,15 @@ const userCheck = function (users, req, res) {
   }
 }
 
+// Checks if user is logged in, if so, display user's email in header
+const userCheckLogin = function (templateVars, users, req, res) {
+  if (users[req.cookies["user_id"]] !== undefined) {
+  templateVars.user = users[req.cookies["user_id"]].email
+  }
+};
+
 module.exports = {
   generateRandomString,
-  userCheck
+  userCheckEmail,
+  userCheckLogin
 };

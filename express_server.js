@@ -2,7 +2,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
-const { generateRandomString, userCheck } = require('./server-functions');
+const { generateRandomString, 
+  userCheckEmail,
+  userCheckLogin 
+} = require('./server-functions');
 
 // Server Set-up
 const app = express();
@@ -36,9 +39,7 @@ app.get("/urls/new", (req, res) => {
     user: req.cookies["user_id"]
   }
 
-  if (users[req.cookies["user_id"]] !== undefined) {
-    templateVars.user = users[req.cookies["user_id"]].email
-  }
+  userCheckLogin(templateVars, users, req, res);
   res.render("urls_new", templateVars);
 });
 
@@ -47,11 +48,8 @@ app.get("/urls", (req, res) => {
     user: req.cookies["user_id"],
     urls: urlDatabase
   };
-
-  if (users[req.cookies["user_id"]] !== undefined) {
-    templateVars.user = users[req.cookies["user_id"]].email
-  }
-
+  
+  userCheckLogin(templateVars, users, req, res);
   res.render("urls_index", templateVars);
 });
 
@@ -63,10 +61,7 @@ app.get("/urls/:shortURL", (req, res) => {
     longURL: urlDatabase[req.params.shortURL]
   }
 
-  if (users[req.cookies["user_id"]] !== undefined) {
-    templateVars.user = users[req.cookies["user_id"]].email
-  }
-
+  userCheckLogin(templateVars, users, req, res);
   res.render("urls_show", templateVars);
 });
 
@@ -80,10 +75,7 @@ app.get("/register", (req, res) => {
     user: req.cookies["user_id"]
   }
 
-  if (users[req.cookies["user_id"]] !== undefined) {
-    templateVars.user = users[req.cookies["user_id"]].email
-  }
-  
+  userCheckLogin(templateVars, users, req, res);
   res.render("urls_register", templateVars);
 });
 
@@ -121,7 +113,7 @@ app.post("/register", (req, res) => {
   const randomID = generateRandomString();
   const userID = 'user' + Object.keys(users).length + randomID;
 
-  userCheck(users, req, res);
+  userCheckEmail(users, req, res);
 
   if (req.body.email === '' || req.body.password === '') {
     res.status(400)
