@@ -10,34 +10,47 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
-    <% if (user === undefined) { %>
+    <div class="d-flex justifty-content-end">
+      <div class="navbar-nav">
+      <% if (user === undefined) { %>
+        <a class="nav-item nav-link" href="/login">Login</a>
+        <a class="nav-item nav-link" href="/Register">Register</a>
+        <% } else { %>
+        <form method="POST" action="/logout"> 
+          <div class="d-flex justifty-content-end">
+            <div>
+              <p class="my-2">Logged in As: <%= user %>!</p>
+            </div>
+            <div class="mx-3">
+              <input class="btn btn-outline-dark" type="submit" value="Logout">
+            </div>
+          </div>
+        </form>
+      <% } %>
+      </div>
+    </div>
+    <!-- <% if (user === undefined) { %>
     <form method="POST" action="/login"> 
       <div class="d-flex justifty-content-end">
-
         <div class="mx-1">
           <input class="form-control" type="text" name="username" placeholder="Username">
         </div>
-
         <div class="mx-1">
           <input class="btn btn-outline-dark" type="submit" value="Login">
         </div>
-
       </div>
     </form>
     <% } else { %>
     <form method="POST" action="/logout"> 
       <div class="d-flex justifty-content-end">
-
         <div>
           <p class="my-2">Logged in As: <%= user %>!</p>
         </div>
-
         <div class="mx-3">
           <input class="btn btn-outline-dark" type="submit" value="Logout">
         </div>
-
       </div>
     </form>
-    <% } %>
+    <% } %> -->
   </nav>
 </header>
