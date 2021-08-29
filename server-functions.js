@@ -10,9 +10,7 @@ const generateRandomString = function () {
 
 // Checks if user's email is already in database
 const userCheck = function (users, req, res) {
-  console.log('yep');
   for (const user in users) {
-    console.log('prop = ', users[user].email)
     if (req.body.email === users[user].email) {
       res.status(400);
       res.redirect('/error');
