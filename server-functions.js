@@ -9,13 +9,13 @@ const generateRandomString = function () {
 }
 
 // Checks if user's email is already in database
-const userCheckEmail = function (users, req, res) {
+const userCheckEmail = function (users, result, req, res) {
   for (const user in users) {
     if (req.body.email === users[user].email) {
-      res.status(400);
-      res.redirect('/error');
+      result = true;
     }
   }
+  return result;
 }
 
 // Checks if user is logged in, if so, display user's email in header
@@ -42,10 +42,9 @@ const userCheckUserID = function (users, userID, randomID, req, res) {
 // Checks if either email or password fields are blank
 const registerCheckBlank = function(req, res) {
   if (req.body.email === '' || req.body.password === '') {
-    res.status(400)
-    res.redirect("/error");
+    res.sendStatus(400);
   }
-}
+};
 
 module.exports = {
   generateRandomString,
