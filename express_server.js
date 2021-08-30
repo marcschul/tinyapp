@@ -21,8 +21,9 @@ app.listen(PORT, () => {
 
 // Databases
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  //shortURL {longURL: URL, userID: ID}
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
 const users = {};
@@ -51,9 +52,9 @@ app.get("/urls/new", (req, res) => {
 
   if (userCheckLogin(false, users, req, res)) {
     res.redirect("/login");
+  } else {
+    res.render("urls_new", templateVars);
   }
-
-  res.render("urls_new", templateVars);
 });
 
 app.get("/urls", (req, res) => {
@@ -77,7 +78,7 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL].longURL;
   res.redirect(longURL);
 });
 
@@ -92,20 +93,33 @@ app.get("/register", (req, res) => {
 // POST Requests
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
-  urlDatabase[shortURL] = req.body.longURL;
+  
+  console.log('before = ', urlDatabase);
+  urlDatabase[shortURL] = {
+    longURL: req.body.longURL,
+    userID: users[req.cookies["user_id"]].id
+  };
+  console.log('after = ', urlDatabase);
+
   res.redirect(`/urls/${shortURL}`);
+});
+
+app.post("/urls/:shortURL", (req, res) => {
+
+  console.log('before = ', urlDatabase);
+  const shortURL = req.params.shortURL;
+  urlDatabase[shortURL] = {
+    longURL: req.body.longURL,
+    userID: users[req.cookies["user_id"]].id
+  };
+  console.log('after = ', urlDatabase);
+
+  res.redirect(`/urls`);
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   delete urlDatabase[req.params.shortURL];
   res.redirect('/urls');
-});
-
-app.post("/urls/:shortURL", (req, res) => {
-  const newLongURL = req.body.longURL;
-  const shortURL = req.params.shortURL;
-  urlDatabase[shortURL] = newLongURL;
-  res.redirect(`/urls`);
 });
 
 app.post("/login", (req, res) => {
@@ -137,7 +151,6 @@ app.post("/register", (req, res) => {
   if (userCheckEmail(users, false, req, res)) {
     res.sendStatus(400);
   }
-
   userCheckUserID(users, userID, randomID, req, res);
   registerCheckBlank(req, res);
 
