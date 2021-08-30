@@ -37,36 +37,69 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
+
+  const userID = req.cookies["user_id"];
+  const userObj = users[userID];
+
   const templateVars = {
-    user: req.cookies["user_id"]
-  }
+    user: userObj
+  };
+  
   res.render("urls_login", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
+
+  const userID = req.cookies["user_id"];
+  const userObj = users[userID];
+
   const templateVars = {
-    user: req.cookies["user_id"]
+    user: userObj
+  };
+
+  if (userCheckLogin(false, users, req, res)) {
+    res.redirect("/login");
   }
 
   res.render("urls_new", templateVars);
 });
 
 app.get("/urls", (req, res) => {
+  const userID = req.cookies["user_id"];
+  const userObj = users[userID];
+
   const templateVars = {
-    user: req.cookies["user_id"],
+    user: userObj,
     urls: urlDatabase
   };
+  
+  
+  
+  // const templateVars = {
+  //   user: req.cookies["user_id"],
+  //   urls: urlDatabase
+  // };
   
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  templateVars = {
-    user: req.cookies["user_id"],
+  const userID = req.cookies["user_id"];
+  const userObj = users[userID];
+
+  const templateVars = {
+    user: userObj,
     urls: urlDatabase,
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL]
-  }
+  };
+
+  // templateVars = {
+  //   user: req.cookies["user_id"],
+  //   urls: urlDatabase,
+  //   shortURL: req.params.shortURL,
+  //   longURL: urlDatabase[req.params.shortURL]
+  // }
 
   res.render("urls_show", templateVars);
 });
@@ -77,9 +110,16 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  templateVars = {
-    user: req.cookies["user_id"]
-  }
+  const userID = req.cookies["user_id"];
+  const userObj = users[userID];
+
+  const templateVars = {
+    user: userObj
+  };
+
+  // templateVars = {
+  //   user: req.cookies["user_id"]
+  // }
 
   res.render("urls_register", templateVars);
 });
@@ -137,6 +177,7 @@ app.post("/register", (req, res) => {
   registerCheckBlank(req, res);
 
   res.cookie('user_id', userID);
+
   console.log(users);
   res.redirect("/urls");
 });
