@@ -37,24 +37,16 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-
-  const userID = req.cookies["user_id"];
-  const userObj = users[userID];
-
   const templateVars = {
-    user: userObj
+    user: users[req.cookies["user_id"]]
   };
 
   res.render("urls_login", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
-
-  const userID = req.cookies["user_id"];
-  const userObj = users[userID];
-
   const templateVars = {
-    user: userObj
+    user: users[req.cookies["user_id"]]
   };
 
   if (userCheckLogin(false, users, req, res)) {
@@ -65,11 +57,8 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  const userID = req.cookies["user_id"];
-  const userObj = users[userID];
-
   const templateVars = {
-    user: userObj,
+    user: users[req.cookies["user_id"]],
     urls: urlDatabase
   };
 
@@ -77,11 +66,8 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  const userID = req.cookies["user_id"];
-  const userObj = users[userID];
-
   const templateVars = {
-    user: userObj,
+    user: users[req.cookies["user_id"]],
     urls: urlDatabase,
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL]
@@ -96,11 +82,8 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  const userID = req.cookies["user_id"];
-  const userObj = users[userID];
-
   const templateVars = {
-    user: userObj
+    user: users[req.cookies["user_id"]]
   };
 
   res.render("urls_register", templateVars);
