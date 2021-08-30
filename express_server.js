@@ -48,7 +48,6 @@ app.get("/urls/new", (req, res) => {
     user: req.cookies["user_id"]
   }
 
-  userCheckLogin(templateVars, users, req, res);
   res.render("urls_new", templateVars);
 });
 
@@ -58,7 +57,6 @@ app.get("/urls", (req, res) => {
     urls: urlDatabase
   };
   
-  userCheckLogin(templateVars, users, req, res);
   res.render("urls_index", templateVars);
 });
 
@@ -70,7 +68,6 @@ app.get("/urls/:shortURL", (req, res) => {
     longURL: urlDatabase[req.params.shortURL]
   }
 
-  userCheckLogin(templateVars, users, req, res);
   res.render("urls_show", templateVars);
 });
 
@@ -84,7 +81,6 @@ app.get("/register", (req, res) => {
     user: req.cookies["user_id"]
   }
 
-  userCheckLogin(templateVars, users, req, res);
   res.render("urls_register", templateVars);
 });
 
