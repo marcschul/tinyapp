@@ -19,10 +19,12 @@ const userCheckEmail = function (users, result, req, res) {
 }
 
 // Checks if user is logged in, if so, display user's email in header
-const userCheckLogin = function (templateVars, users, req, res) {
-  if (users[req.cookies["user_id"]] !== undefined) {
-  templateVars.user = users[req.cookies["user_id"]].email
+const userCheckLogin = function (result, users, req, res) {
+  if (users[req.cookies["user_id"]] === undefined) {
+    // true if user is not logged in
+  result = true;
   }
+  return result;
 };
 
 // Checks if user's ID is already in database when registering a user
