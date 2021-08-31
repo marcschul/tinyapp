@@ -18,7 +18,7 @@ const userCheckEmail = function (users, result, req, res) {
   return result;
 }
 
-// Checks if user is logged in, if so, display user's email in header
+// Checks if user is logged in, if user is logged in returns false.
 const userCheckLogin = function (result, users, req, res) {
   if (users[req.cookies["user_id"]] === undefined) {
     // true if user is not logged in
@@ -48,10 +48,23 @@ const registerCheckBlank = function(req, res) {
   }
 };
 
+// b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+const urlsForUser = function(users, urlDatabase, userURLs, req) {
+  for (const shortURL in urlDatabase) {
+    if (users[req.cookies["user_id"]].id === urlDatabase[shortURL].userID) {
+      userURLs[shortURL] = {
+        longURL: urlDatabase[shortURL].longURL,
+        userID: users[req.cookies["user_id"]].id
+      }
+    }
+  }
+};
+
 module.exports = {
   generateRandomString,
   userCheckEmail,
   userCheckLogin,
   userCheckUserID,
-  registerCheckBlank
+  registerCheckBlank,
+  urlsForUser
 };
