@@ -116,12 +116,16 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-
-  const shortURL = req.params.shortURL;
-  urlDatabase[shortURL] = {
-    longURL: req.body.longURL,
-    userID: users[req.cookies["user_id"]].id
-  };
+  for (const shortURL in urlDatabase) {
+    if (users[req.cookies["user_id"]].id === urlDatabase[shortURL].userID) {
+      const shortURLs = req.params.shortURL;
+      urlDatabase[shortURLs] = {
+        longURL: req.body.longURL,
+        userID: users[req.cookies["user_id"]].id
+      };
+      res.redirect('/urls');
+    }
+  }
 
   res.redirect('/urls');
 });
