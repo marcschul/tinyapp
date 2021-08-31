@@ -123,11 +123,16 @@ app.post("/urls/:shortURL", (req, res) => {
     userID: users[req.cookies["user_id"]].id
   };
 
-  res.redirect(`/urls`);
+  res.redirect('/urls');
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  delete urlDatabase[req.params.shortURL];
+  for (const shortURL in urlDatabase) {
+    if (users[req.cookies["user_id"]].id === urlDatabase[shortURL].userID) {
+      delete urlDatabase[req.params.shortURL];
+      res.redirect('/urls');
+    }
+  }
   res.redirect('/urls');
 });
 
