@@ -2,7 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
-const { generateRandomString, 
+const { generateRandomString,
   userCheckEmail,
   userCheckLogin,
   userCheckUserID,
@@ -72,7 +72,7 @@ app.get("/urls", (req, res) => {
     userURLs: userURLs
   };
 
-    res.render("urls_index", templateVars);
+  res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -133,17 +133,17 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post("/login", (req, res) => {
   if (userCheckEmail(users, false, req, res)) {
-    for (const user in users){
+    for (const user in users) {
       let bodyEmail = req.body.email;
       let userEmail = users[user].email;
       let bodyPassword = req.body.password;
       let userPassword = users[user].password;
       if (bodyEmail === userEmail && bodyPassword === userPassword) {
-      res.cookie('user_id', user);
-      res.redirect('/urls');
-      };
-    };
-  };
+        res.cookie('user_id', user);
+        res.redirect('/urls');
+      }
+    }
+  }
   res.sendStatus(403);
 });
 

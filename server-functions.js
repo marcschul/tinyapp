@@ -1,40 +1,40 @@
 // Generates a random alphaNumeric 6 character string
-const generateRandomString = function () {
+const generateRandomString = function() {
   let result = '';
   let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   for (let i = 0; i < 6; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return result;
-}
+};
 
 // Checks if user's email is already in database
-const userCheckEmail = function (users, result, req, res) {
+const userCheckEmail = function(users, result, req) {
   for (const user in users) {
     if (req.body.email === users[user].email) {
       result = true;
     }
   }
   return result;
-}
+};
 
 // Checks if user is logged in, if user is logged in returns false.
-const userCheckLogin = function (result, users, req, res) {
+const userCheckLogin = function(result, users, req) {
   if (users[req.cookies["user_id"]] === undefined) {
     // true if user is not logged in
-  result = true;
+    result = true;
   }
   return result;
 };
 
 // Checks if user's ID is already in database when registering a user
-const userCheckUserID = function (users, userID, randomID, req, res) {
+const userCheckUserID = function(users, userID, randomID, req, res) {
   if (users[userID] === undefined) {
     users[userID] = {
       id: randomID,
       email: req.body.email,
       password: req.body.password
-    }
+    };
   } else {
     console.log('error: userID already taken');
     res.redirect("/error");
@@ -55,11 +55,11 @@ const urlsForUser = function(users, urlDatabase, userURLs, req) {
       userURLs[shortURL] = {
         longURL: urlDatabase[shortURL].longURL,
         userID: users[req.cookies["user_id"]].id
-      }
+      };
       urlDatabase[shortURL] = {
         longURL: urlDatabase[shortURL].longURL,
         userID: users[req.cookies["user_id"]].id
-      }
+      };
     }
   }
 };
