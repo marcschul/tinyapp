@@ -48,7 +48,7 @@ const registerCheckBlank = function(req, res) {
   }
 };
 
-// b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+// Checks if user id and URLid is the same, if so, update userID database and urLDatabase
 const urlsForUser = function(users, urlDatabase, userURLs, req) {
   for (const shortURL in urlDatabase) {
     if (users[req.cookies["user_id"]].id === urlDatabase[shortURL].userID) {
