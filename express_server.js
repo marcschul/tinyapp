@@ -131,11 +131,11 @@ app.post("/login", (req, res) => {
   if (userCheckEmail(users, false, req, res)) {
     for (const user in users){
       let bodyEmail = req.body.email;
-      let bodyPassword = req.body.password;
       let userEmail = users[user].email;
+      let bodyPassword = req.body.password;
       let userPassword = users[user].password;
       if (bodyEmail === userEmail && bodyPassword === userPassword) {
-      res.cookie('user_id', req.body.email);
+      res.cookie('user_id', user);
       res.redirect('/urls');
       };
     };
