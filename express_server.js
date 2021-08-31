@@ -61,7 +61,6 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls", (req, res) => {
   const userURLs = {};
   if (req.cookies["user_id"] !== undefined) {
-    console.log('req.cookies["user_id"] !== undefined')
     urlsForUser(users, urlDatabase, userURLs, req);
   }
 
@@ -108,25 +107,21 @@ app.get("/register", (req, res) => {
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   
-  console.log('before = ', urlDatabase);
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
     userID: users[req.cookies["user_id"]].id
   };
-  console.log('after = ', urlDatabase);
 
   res.redirect(`/urls/${shortURL}`);
 });
 
 app.post("/urls/:shortURL", (req, res) => {
 
-  console.log('before = ', urlDatabase);
   const shortURL = req.params.shortURL;
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
     userID: users[req.cookies["user_id"]].id
   };
-  console.log('after = ', urlDatabase);
 
   res.redirect(`/urls`);
 });
@@ -137,7 +132,6 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log('users = ', users);
   if (userCheckEmail(users, false, req, res)) {
     for (const user in users){
       let bodyEmail = req.body.email;
@@ -169,7 +163,5 @@ app.post("/register", (req, res) => {
   registerCheckBlank(req, res);
 
   res.cookie('user_id', userID);
-
-  console.log(users);
   res.redirect("/urls");
 });
