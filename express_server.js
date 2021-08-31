@@ -74,7 +74,11 @@ app.get("/urls/:shortURL", (req, res) => {
     longURL: urlDatabase[req.params.shortURL].longURL
   };
 
-  res.render("urls_show", templateVars);
+  if (userCheckLogin(false, users, req, res)) {
+    res.redirect("/login");
+  } else {
+    res.render("urls_show", templateVars);
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
