@@ -56,6 +56,10 @@ const urlsForUser = function(users, urlDatabase, userURLs, req) {
         longURL: urlDatabase[shortURL].longURL,
         userID: users[req.cookies["user_id"]].id
       }
+      urlDatabase[shortURL] = {
+        longURL: urlDatabase[shortURL].longURL,
+        userID: users[req.cookies["user_id"]].id
+      }
     }
   }
 };
