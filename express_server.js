@@ -6,7 +6,8 @@ const { generateRandomString,
   userCheckEmail,
   userCheckLogin,
   userCheckUserID,
-  registerCheckBlank
+  registerCheckBlank,
+  urlsForUser
 } = require('./server-functions');
 
 // Server Set-up
@@ -58,12 +59,21 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
+  const userURLs = {};
+  if (req.cookies["user_id"] !== undefined) {
+    console.log('req.cookies["user_id"] !== undefined')
+    urlsForUser(users, urlDatabase, userURLs, req);
+  }
+
   const templateVars = {
     user: users[req.cookies["user_id"]],
-    urls: urlDatabase
+    urls: urlDatabase,
+    users: users,
+    req: req,
+    userURLs: userURLs
   };
 
-  res.render("urls_index", templateVars);
+    res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
