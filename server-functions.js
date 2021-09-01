@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 // Generates a random alphaNumeric 6 character string
 const generateRandomString = function() {
   let result = '';
@@ -9,13 +11,13 @@ const generateRandomString = function() {
 };
 
 // Checks if user's email is already in database
-const userCheckEmail = function(users, result, req) {
+const userCheckEmail = function(users, email) {
   for (const user in users) {
-    if (req.body.email === users[user].email) {
-      result = true;
+    if (email === users[user].email) {
+      return users[user];
     }
   }
-  return result;
+  return null;
 };
 
 // Checks if user is logged in, if user is logged in returns false.
@@ -25,20 +27,6 @@ const userCheckLogin = function(result, users, req) {
     result = true;
   }
   return result;
-};
-
-// Checks if user's ID is already in database when registering a user
-const userCheckUserID = function(users, userID, randomID, req, res) {
-  if (users[userID] === undefined) {
-    users[userID] = {
-      id: randomID,
-      email: req.body.email,
-      password: req.body.password
-    };
-  } else {
-    console.log('error: userID already taken');
-    res.redirect("/error");
-  }
 };
 
 // Checks if either email or password fields are blank
@@ -68,7 +56,6 @@ module.exports = {
   generateRandomString,
   userCheckEmail,
   userCheckLogin,
-  userCheckUserID,
   registerCheckBlank,
   urlsForUser
 };
