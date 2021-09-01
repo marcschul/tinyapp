@@ -2,10 +2,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 const { generateRandomString,
   userCheckEmail,
   userCheckLogin,
-  userCheckUserID,
   registerCheckBlank,
   urlsForUser
 } = require('./server-functions');
@@ -75,6 +75,24 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+// right click browswer -> empty cache and hard reload -> seems to resolve the issue?
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL].longURL;
+  if (longURL.startsWith('http://')) {
+    res.redirect(303, longURL);
+  } else {
+    res.redirect('http://' + longURL);
+  }
+});
+
+app.get("/register", (req, res) => {
+  const templateVars = {
+    user: users[req.cookies["user_id"]]
+  };
+  
+  res.render("urls_register", templateVars);
+});
+
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
     user: users[req.cookies["user_id"]],
@@ -90,18 +108,8 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL].longURL;
-  res.redirect(301, longURL);
-});
 
-app.get("/register", (req, res) => {
-  const templateVars = {
-    user: users[req.cookies["user_id"]]
-  };
 
-  res.render("urls_register", templateVars);
-});
 
 // POST Requests
 app.post("/urls", (req, res) => {
@@ -111,7 +119,7 @@ app.post("/urls", (req, res) => {
     longURL: req.body.longURL,
     userID: users[req.cookies["user_id"]].id
   };
-
+  
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -123,10 +131,9 @@ app.post("/urls/:shortURL", (req, res) => {
         longURL: req.body.longURL,
         userID: users[req.cookies["user_id"]].id
       };
-      res.redirect('/urls');
+      return res.redirect('/urls');
     }
   }
-
   res.redirect('/urls');
 });
 
@@ -141,19 +148,13 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  if (userCheckEmail(users, false, req, res)) {
-    for (const user in users) {
-      let bodyEmail = req.body.email;
-      let userEmail = users[user].email;
-      let bodyPassword = req.body.password;
-      let userPassword = users[user].password;
-      if (bodyEmail === userEmail && bodyPassword === userPassword) {
-        res.cookie('user_id', user);
-        res.redirect('/urls');
-      }
-    }
+  const user = userCheckEmail(users, req.body.email);
+  if (user && bcrypt.compareSync(req.body.password, user.password)) {
+    res.cookie('user_id', user.id);
+    res.redirect('/urls');
+  } else {
+    res.sendStatus(403);
   }
-  res.sendStatus(403);
 });
 
 app.post("/logout", (req, res) => {
@@ -163,14 +164,26 @@ app.post("/logout", (req, res) => {
 
 app.post("/register", (req, res) => {
   const randomID = generateRandomString();
-  const userID = 'user' + Object.keys(users).length + randomID;
 
-  if (userCheckEmail(users, false, req, res)) {
-    res.sendStatus(400);
+  if (userCheckEmail(users, req.body.email)) {
+    return res.sendStatus(400);
   }
-  userCheckUserID(users, userID, randomID, req, res);
+
   registerCheckBlank(req, res);
 
-  res.cookie('user_id', userID);
+  if (users[randomID] === undefined) {
+    const password = req.body.password;
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    users[randomID] = {
+      id: randomID,
+      email: req.body.email,
+      password: hashedPassword
+    };
+  } else {
+    console.log('error: userID already taken');
+    res.redirect("/error");
+  }
+
+  res.cookie('user_id', randomID);
   res.redirect("/urls");
 });
