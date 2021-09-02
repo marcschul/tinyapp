@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt');
-
 // Generates a random alphaNumeric 6 character string
 const generateRandomString = function() {
   let result = '';
@@ -45,8 +43,9 @@ const urlsForUser = function(users, urlDatabase, userURLs, req) {
 // Checks if user's email is already in database and returns userID
 const getUserByEmail = function(email, database) {
   for (const user in database) {
-    if (email === database[user].email)
-    return user;
+    if (email === database[user].email) {
+      return user;
+    }
   }
 };
 
