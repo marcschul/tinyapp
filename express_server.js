@@ -43,10 +43,6 @@ app.get("/error", (req, res) => {
   res.render("urls_error");
 });
 
-app.get("/test", (req, res) => {
-  console.log(getUserByEmail(req.session.user_id.email, users));
-})
-
 app.get("/login", (req, res) => {
   const templateVars = {
     user: users[req.session.user_id]
