@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']
-}))
+}));
 
 app.set("view engine", "ejs");
 app.listen(PORT, () => {
@@ -150,7 +150,7 @@ app.post("/login", (req, res) => {
   checkBlankFields(req, res);
   const email = req.body.email;
   const user = getUserByEmail(email, users);
-  const passwordCheck = bcrypt.compareSync(req.body.password, users[user].password)
+  const passwordCheck = bcrypt.compareSync(req.body.password, users[user].password);
   if ((user) && passwordCheck) {
     req.session.user_id = users[user].id;
     res.redirect('/urls');
@@ -166,7 +166,7 @@ app.post("/logout", (req, res) => {
 
 app.post("/register", (req, res) => {
   const randomID = generateRandomString();
-  const email = req.body.email
+  const email = req.body.email;
   const user = getUserByEmail(email, users);
 
   if (user) {
