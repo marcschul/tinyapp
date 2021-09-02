@@ -27,7 +27,6 @@ app.listen(PORT, () => {
 
 // Databases
 const urlDatabase = {
-  //shortURL {longURL: URL, userID: ID}
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
@@ -112,9 +111,6 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 });
 
-
-
-
 // POST Requests
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
@@ -156,7 +152,6 @@ app.post("/login", (req, res) => {
   const user = getUserByEmail(email, users);
   const passwordCheck = bcrypt.compareSync(req.body.password, users[user].password)
   if ((user) && passwordCheck) {
-    // res.cookie('user_id', user.id);
     req.session.user_id = users[user].id;
     res.redirect('/urls');
   } else {
@@ -188,11 +183,8 @@ app.post("/register", (req, res) => {
       email: req.body.email,
       password: hashedPassword
     };
-  } else {
-    console.log('error: userID already taken');
-    res.redirect("/error");
   }
+
   req.session.user_id = randomID;
-  // res.cookie('user_id', randomID);
   res.redirect("/urls");
 });
