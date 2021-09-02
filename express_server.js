@@ -12,7 +12,6 @@ const { generateRandomString,
 
 // Server Set-up
 const app = express();
-const PORT = 8080;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
