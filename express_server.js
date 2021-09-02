@@ -80,7 +80,6 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-// sort edge cases, eg. http:/www.google.ca => http://http/:www.google.ca
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL].longURL;
   if (longURL.startsWith('http://')) {
