@@ -187,6 +187,7 @@ app.post("/register", (req, res) => {
       password: hashedPassword
     };
   }
+  
   req.session.user_id = randomID;
   res.redirect("/urls");
 });
