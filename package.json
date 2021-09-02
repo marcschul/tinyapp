@@ -4,8 +4,6 @@
   "description": "A tiny application",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/nodemon -L express_server.js",
-    "test": "./node_modules/mocha/bin/mocha",
     "start:dev": "./node_modules/.bin/nodemon -L express_server.js"
   },
   "repository": {
