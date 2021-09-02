@@ -1,7 +1,6 @@
 // Import packages / functions
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 const { generateRandomString,
@@ -15,7 +14,7 @@ const { generateRandomString,
 const app = express();
 const PORT = 8080;
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());app.use(cookieSession({
+app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']
 }))
