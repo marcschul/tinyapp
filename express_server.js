@@ -1,5 +1,6 @@
 // Import packages / functions
 const express = require("express");
+const PORT = process.env.PORT;
 const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
@@ -19,9 +20,6 @@ app.use(cookieSession({
 }));
 
 app.set("view engine", "ejs");
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
-});
 
 // Databases
 const urlDatabase = {
@@ -189,4 +187,8 @@ app.post("/register", (req, res) => {
   
   req.session.user_id = randomID;
   res.redirect("/urls");
+});
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
 });
