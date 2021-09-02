@@ -147,7 +147,8 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const email = req.body.email
+  checkBlankFields(req, res);
+  const email = req.body.email;
   const user = getUserByEmail(email, users);
   const passwordCheck = bcrypt.compareSync(req.body.password, users[user].password)
   if ((user) && passwordCheck) {
