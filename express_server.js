@@ -5,10 +5,10 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 const { generateRandomString,
-  userCheckEmail,
   userCheckLogin,
   registerCheckBlank,
-  urlsForUser
+  urlsForUser,
+  getUserByEmail
 } = require('./server-functions');
 
 // Server Set-up
@@ -42,6 +42,10 @@ app.get("/", (req, res) => {
 app.get("/error", (req, res) => {
   res.render("urls_error");
 });
+
+app.get("/test", (req, res) => {
+  console.log(getUserByEmail(req.session.user_id.email, users));
+})
 
 app.get("/login", (req, res) => {
   const templateVars = {
@@ -152,10 +156,12 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const user = userCheckEmail(users, req.body.email);
-  if (user && bcrypt.compareSync(req.body.password, user.password)) {
+  const email = req.body.email
+  const user = getUserByEmail(email, users);
+  const passwordCheck = bcrypt.compareSync(req.body.password, users[user].password)
+  if ((user) && passwordCheck) {
     // res.cookie('user_id', user.id);
-    req.session.user_id = user.id;
+    req.session.user_id = users[user].id;
     res.redirect('/urls');
   } else {
     res.sendStatus(403);
@@ -169,8 +175,10 @@ app.post("/logout", (req, res) => {
 
 app.post("/register", (req, res) => {
   const randomID = generateRandomString();
+  const email = req.body.email
+  const user = getUserByEmail(email, users);
 
-  if (userCheckEmail(users, req.body.email)) {
+  if (user) {
     return res.sendStatus(400);
   }
 
