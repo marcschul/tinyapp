@@ -10,16 +10,6 @@ const generateRandomString = function() {
   return result;
 };
 
-// Checks if user's email is already in database
-const userCheckEmail = function(users, email) {
-  for (const user in users) {
-    if (email === users[user].email) {
-      return users[user];
-    }
-  }
-  return null;
-};
-
 // Checks if user is logged in, if user is logged in returns false.
 const userCheckLogin = function(result, users, req) {
   if (users[req.session.user_id] === undefined) {
@@ -52,10 +42,18 @@ const urlsForUser = function(users, urlDatabase, userURLs, req) {
   }
 };
 
+// Checks if user's email is already in database and returns userID
+const getUserByEmail = function(email, database) {
+  for (const user in database) {
+    if (email === database[user].email)
+    return user;
+  }
+};
+
 module.exports = {
   generateRandomString,
-  userCheckEmail,
   userCheckLogin,
   registerCheckBlank,
-  urlsForUser
+  urlsForUser,
+  getUserByEmail
 };
