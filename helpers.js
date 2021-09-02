@@ -20,7 +20,7 @@ const userCheckLogin = function(result, users, req) {
 };
 
 // Checks if either email or password fields are blank
-const registerCheckBlank = function(req, res) {
+const checkBlankFields = function(req, res) {
   if (req.body.email === '' || req.body.password === '') {
     res.sendStatus(400);
   }
@@ -53,7 +53,7 @@ const getUserByEmail = function(email, database) {
 module.exports = {
   generateRandomString,
   userCheckLogin,
-  registerCheckBlank,
+  checkBlankFields,
   urlsForUser,
   getUserByEmail
 };

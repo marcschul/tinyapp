@@ -5,7 +5,7 @@ const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 const { generateRandomString,
   userCheckLogin,
-  registerCheckBlank,
+  checkBlankFields,
   urlsForUser,
   getUserByEmail
 } = require('./helpers');
@@ -172,7 +172,7 @@ app.post("/register", (req, res) => {
     return res.sendStatus(400);
   }
 
-  registerCheckBlank(req, res);
+  checkBlankFields(req, res);
 
   if (users[randomID] === undefined) {
     const password = req.body.password;
