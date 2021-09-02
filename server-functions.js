@@ -22,7 +22,7 @@ const userCheckEmail = function(users, email) {
 
 // Checks if user is logged in, if user is logged in returns false.
 const userCheckLogin = function(result, users, req) {
-  if (users[req.cookies["user_id"]] === undefined) {
+  if (users[req.session.user_id] === undefined) {
     // true if user is not logged in
     result = true;
   }
@@ -39,14 +39,14 @@ const registerCheckBlank = function(req, res) {
 // Checks if user id and URLid is the same, if so, update userID database and urLDatabase
 const urlsForUser = function(users, urlDatabase, userURLs, req) {
   for (const shortURL in urlDatabase) {
-    if (users[req.cookies["user_id"]].id === urlDatabase[shortURL].userID) {
+    if (users[req.session.user_id].id === urlDatabase[shortURL].userID) {
       userURLs[shortURL] = {
         longURL: urlDatabase[shortURL].longURL,
-        userID: users[req.cookies["user_id"]].id
+        userID: users[req.session.user_id].id
       };
       urlDatabase[shortURL] = {
         longURL: urlDatabase[shortURL].longURL,
-        userID: users[req.cookies["user_id"]].id
+        userID: users[req.session.user_id].id
       };
     }
   }
