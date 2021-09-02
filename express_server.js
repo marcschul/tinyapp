@@ -9,7 +9,7 @@ const { generateRandomString,
   registerCheckBlank,
   urlsForUser,
   getUserByEmail
-} = require('./server-functions');
+} = require('./helper');
 
 // Server Set-up
 const app = express();
