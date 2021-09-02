@@ -9,7 +9,7 @@ const { generateRandomString,
   registerCheckBlank,
   urlsForUser,
   getUserByEmail
-} = require('./helper');
+} = require('./helpers');
 
 // Server Set-up
 const app = express();
