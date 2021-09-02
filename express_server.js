@@ -1,6 +1,6 @@
 // Import packages / functions
 const express = require("express");
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
