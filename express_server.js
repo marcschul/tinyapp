@@ -30,7 +30,14 @@ const urlDatabase = {
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
-const users = {};
+// test account password: secret321
+const users = {
+  ruI7iW: {
+    id: 'ruI7iW',
+    email: 'test@email.com',
+    password: '$2b$10$00xL1bQTw5JwtdD0X5OFT.oheqRyd45FD.dxLUrddJKLBWHb9c27W'
+  }
+};
 
 // GET Requests
 app.get("/", (req, res) => {
@@ -184,7 +191,6 @@ app.post("/register", (req, res) => {
       password: hashedPassword
     };
   }
-
   req.session.user_id = randomID;
   res.redirect("/urls");
 });
