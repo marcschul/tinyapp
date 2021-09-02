@@ -44,10 +44,6 @@ app.get("/", (req, res) => {
   res.redirect("/urls");
 });
 
-app.get("/error", (req, res) => {
-  res.render("urls_error");
-});
-
 app.get("/login", (req, res) => {
   const templateVars = {
     user: users[req.session.user_id]
