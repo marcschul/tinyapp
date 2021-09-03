@@ -161,10 +161,10 @@ app.post("/login", (req, res) => {
   const passwordCheck = bcrypt.compareSync(req.body.password, users[user].password);
   if ((user) && passwordCheck) {
     req.session.user_id = users[user].id;
-    res.redirect('/urls');
-  } else {
-    res.sendStatus(403);
+    return res.redirect('/urls');
   }
+  
+  return res.sendStatus(403);
 });
 
 app.post("/logout", (req, res) => {
