@@ -119,7 +119,8 @@ app.get("/urls/:shortURL", (req, res) => {
 
 // POST Requests
 app.post("/urls", (req, res) => {
-  if (!req.session.user_ID) {
+
+  if (!req.session.user_id) {
     return res.status(401).send(`
     <h1>Error: 401</h1>
     <h2>invalid authentication</h2>
