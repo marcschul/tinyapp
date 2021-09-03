@@ -105,9 +105,13 @@ app.get("/urls/:shortURL", (req, res) => {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL
   };
+  const shortURLuser = urlDatabase[req.params.shortURL].userID;
 
-  if (userCheckLogin(false, users, req, res)) {
-    res.redirect("/login");
+  if (req.session.user_id !== shortURLuser) {
+    res.status(400).send(`
+    <h1>Error: 400</h1>
+    <h2>Bad request</h2>
+    `);
   } else {
     res.render("urls_show", templateVars);
   }
@@ -115,6 +119,13 @@ app.get("/urls/:shortURL", (req, res) => {
 
 // POST Requests
 app.post("/urls", (req, res) => {
+  if (!req.session.user_ID) {
+    return res.status(401).send(`
+    <h1>Error: 401</h1>
+    <h2>invalid authentication</h2>
+    `);
+  }
+
   const shortURL = generateRandomString();
   
   urlDatabase[shortURL] = {
@@ -153,7 +164,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.post("/login", (req, res) => {
   
   if (checkBlankFields(req)) {
-    return res.sendStatus(400);
+    return res.status(401).send(`
+    <h1>Error: 401</h1>
+    <h2>blank user or email</h2>
+    `);
   };
 
   const email = req.body.email;
@@ -163,8 +177,11 @@ app.post("/login", (req, res) => {
     req.session.user_id = users[user].id;
     return res.redirect('/urls');
   }
-  
-  return res.sendStatus(403);
+
+  return res.status(403).send(`
+  <h1>Error: 403</h1>
+  <h2>Invalid User or Password</h2>
+  `);
 });
 
 app.post("/logout", (req, res) => {
@@ -173,9 +190,12 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  
+
   if (checkBlankFields(req)) {
-    return res.sendStatus(400);
+    return res.status(401).send(`
+    <h1>Error: 401</h1>
+    <h2>blank user or email</h2>
+    `);
   };
 
   const randomID = generateRandomString();
@@ -183,7 +203,10 @@ app.post("/register", (req, res) => {
   const user = getUserByEmail(email, users);
 
   if (user) {
-    return res.sendStatus(400);
+    return res.status(409).send(`
+    <h1>Error: 409</h1>
+    <h2>Email already taken</h2>
+    `);
   }
 
   if (users[randomID] === undefined) {
@@ -195,7 +218,6 @@ app.post("/register", (req, res) => {
       password: hashedPassword
     };
   }
-  
   req.session.user_id = randomID;
   res.redirect("/urls");
 });
