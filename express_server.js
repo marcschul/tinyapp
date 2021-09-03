@@ -150,7 +150,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  checkBlankFields(req, res);
+  
+  if (checkBlankFields(req)) {
+    return res.sendStatus(400);
+  };
+
   const email = req.body.email;
   const user = getUserByEmail(email, users);
   const passwordCheck = bcrypt.compareSync(req.body.password, users[user].password);
@@ -168,6 +172,11 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
+  
+  if (checkBlankFields(req)) {
+    return res.sendStatus(400);
+  };
+
   const randomID = generateRandomString();
   const email = req.body.email;
   const user = getUserByEmail(email, users);
@@ -175,8 +184,6 @@ app.post("/register", (req, res) => {
   if (user) {
     return res.sendStatus(400);
   }
-
-  checkBlankFields(req, res);
 
   if (users[randomID] === undefined) {
     const password = req.body.password;

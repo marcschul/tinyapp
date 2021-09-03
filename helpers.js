@@ -17,11 +17,14 @@ const userCheckLogin = function(result, users, req) {
   return result;
 };
 
-// Checks if either email or password fields are blank
-const checkBlankFields = function(req, res) {
+// Checks if email or password fields are blank and returns a boolean.
+  // if either field is blank, returns true. Otherwise, returns false.
+const checkBlankFields = function(req) {
+  let result = false;
   if (req.body.email === '' || req.body.password === '') {
-    res.sendStatus(400);
+    result = true;
   }
+  return result;
 };
 
 // Checks if user id and URLid is the same, if so, update userID database and urLDatabase
