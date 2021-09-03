@@ -126,17 +126,18 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  for (const shortURL in urlDatabase) {
-    if (users[req.session.user_id].id === urlDatabase[shortURL].userID) {
-      const shortURLs = req.params.shortURL;
-      urlDatabase[shortURLs] = {
+  const shortURL = req.params.shortURL;
+  const userID = req.session.user_id;
+  const urlDatabaseID = urlDatabase[shortURL].userID
+
+    if (userID === urlDatabaseID) {
+      urlDatabase[shortURL] = {
         longURL: req.body.longURL,
-        userID: users[req.session.user_id].id
+        userID: req.session.user_id
       };
       return res.redirect('/urls');
     }
-  }
-  res.redirect('/urls');
+  return res.redirect('/urls');
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
