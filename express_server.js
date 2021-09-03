@@ -57,11 +57,11 @@ app.get("/urls/new", (req, res) => {
     user: users[req.session.user_id]
   };
 
-  if (userCheckLogin(false, users, req, res)) {
-    res.redirect("/login");
-  } else {
-    res.render("urls_new", templateVars);
+  if (userCheckLogin(users, req)) {
+    return res.redirect("/login");
   }
+
+  return res.render("urls_new", templateVars);
 });
 
 app.get("/urls", (req, res) => {
@@ -108,9 +108,9 @@ app.get("/urls/:shortURL", (req, res) => {
   const shortURLuser = urlDatabase[req.params.shortURL].userID;
 
   if (req.session.user_id !== shortURLuser) {
-    res.status(400).send(`
-    <h1>Error: 400</h1>
-    <h2>Bad request</h2>
+    res.status(401).send(`
+    <h1>Error: 401</h1>
+    <h2>invalid authentication</h2>
     `);
   } else {
     res.render("urls_show", templateVars);
@@ -142,14 +142,18 @@ app.post("/urls/:shortURL", (req, res) => {
   const userID = req.session.user_id;
   const urlDatabaseID = urlDatabase[shortURL].userID
 
-    if (userID === urlDatabaseID) {
-      urlDatabase[shortURL] = {
-        longURL: req.body.longURL,
-        userID: req.session.user_id
-      };
-      return res.redirect('/urls');
-    }
-  return res.redirect('/urls');
+  if (userID === urlDatabaseID) {
+    urlDatabase[shortURL] = {
+      longURL: req.body.longURL,
+      userID: req.session.user_id
+    };
+    return res.redirect('/urls');
+  }
+
+  return res.status(401).send(`
+  <h1>Error: 401</h1>
+  <h2>Unauthorized client error</h2>
+  `);
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
