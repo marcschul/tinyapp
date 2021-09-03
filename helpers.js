@@ -9,10 +9,10 @@ const generateRandomString = function() {
 };
 
 // Checks if user is logged in, if user is logged in returns false.
-const userCheckLogin = function(result, users, req) {
-  if (users[req.session.user_id] === undefined) {
-    // true if user is not logged in
-    result = true;
+const userCheckLogin = function(users, req) {
+  let result = true;
+  if (users[req.session.user_id]) {
+    result = false;
   }
   return result;
 };
